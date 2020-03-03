@@ -1,3 +1,3 @@
-from app import agrgb
+from app.agrgb import app
 
-agrgb.run(debug=True)
+app.run(debug=True)

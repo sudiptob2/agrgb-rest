@@ -3,7 +3,7 @@ import jsonpickle
 import numpy as np
 import cv2
 
-from app.agrgb.ml.detect import Detect
+from app.agrgb.ml.detector import Detect
 
 mod = Blueprint('api', __name__)
 detect = Detect()
@@ -11,7 +11,7 @@ detect = Detect()
 
 # create the route
 @mod.route('/detect', methods=['POST'])
-def detect():
+def do_post():
     r = request
     imagestr = None
     imagestr = request.files["image"].read()  # here key of the file is 'image'

@@ -1,5 +1,7 @@
 from flask import Flask
 
+from .api.routes import mod
+
 app = Flask(__name__)
 
 # Import the Blueprint
@@ -7,4 +9,4 @@ app = Flask(__name__)
 
 # Register the api
 #app.register_blueprint(app.site.routes.mod)
-app.register_blueprint(agrgb.api.routes.mod, url_prefix='/api')
+app.register_blueprint(mod, url_prefix='/api')
