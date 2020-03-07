@@ -1,27 +1,34 @@
-from flask import Blueprint
-import requests
-import json
+from flask import Blueprint, Flask, request, Response
+import jsonpickle
+import numpy as np
 import cv2
+from flask_cors import CORS, cross_origin
+from app.agrgb.ml.detector import Detect
+
+mod = Blueprint('api', __name__)
+CORS(mod)
+detect = Detect()
 
 
-mod = Blueprint('site', __name__)
+# create the route
+@mod.route('/detect', methods=['POST'])
+@cross_origin()
+def do_post():
+    r = request
+    imagestr = None
+    imagestr = request.files["image"].read()  # here key of the file is 'image'
 
-@mod.route('/test')
-def test():
-    addr = 'http://localhost:5000' #default domain of the server
-    test_url = addr + '/api/detect'# address of the api to the api where request to be sent
+    # convert string of image data to uint8 numpy array
+    npimg = np.fromstring(imagestr, np.uint8)
+    # decode image
+    img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+    # do some fancy processing here....
 
-    # prepare headers for http request
-    content_type = 'image/jpeg'
-    headers = {'content-type': content_type}
+    res = detect.predict(img)
 
-    img = cv2.imread('static/lena.jpg')
-    # encode image as jpeg
-    _, img_encoded = cv2.imencode('.jpg', img)
-    # send http request with image and receive response
-    response = requests.post(test_url, data=img_encoded.tostring(), headers=headers)
-    # decode response
-    # print(json.loads(response.text))
-    return json.loads(response.text)
+    # build a response dict to send back to client
+    response = {'disease': res}
+    # encode response using jsonpickle
+    response_pickled = jsonpickle.encode(response)
 
-    # expected output: {u'message': u'image received. size=124x124'}
+    return Response(response=response_pickled, status=200, mimetype="application/json")
