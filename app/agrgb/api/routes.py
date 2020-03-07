@@ -2,10 +2,12 @@ from flask import Blueprint, Flask, request, Response
 import jsonpickle
 import numpy as np
 import cv2
+from flask_cors import CORS, cross_origin
 
 from app.agrgb.ml.detector import Detect
 
 mod = Blueprint('api', __name__)
+CORS(mod)
 detect = Detect()
 
 
