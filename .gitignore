@@ -135,4 +135,4 @@ dmypy.json
 .pytype/
 
 #intelij configuration
-.idea/
+.idea
