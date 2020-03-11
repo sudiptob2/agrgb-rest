@@ -43,7 +43,7 @@ python app/run.py
 
 ## Deployment
 
-#####Deploy the the dockerized app to heroku
+##### Deploy the the dockerized app to heroku
 Appropriate files are given.
 * Dockerfile 
 * heroku.yml
